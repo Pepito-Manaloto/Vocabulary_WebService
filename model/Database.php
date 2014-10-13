@@ -12,9 +12,9 @@ class Database
     private $mysqli;
     private $pdo;
 
-	/**
-	 * Returns mysqli database connection.
-	 */
+    /**
+     * Returns mysqli database connection.
+     */
     public function getMySQLiConnection()
     {
         $this->mysqli = new mysqli($this->host, $this->username, $this->password, $this->schema);
@@ -30,8 +30,8 @@ class Database
     }
 
     /**
-	 * Returns pdo database connection.
-	 */
+     * Returns pdo database connection.
+     */
     public function getPDOConnection()
     {
         try
@@ -46,9 +46,9 @@ class Database
         return $this->pdo;
     }
 
-	/**
-	 * Closes all database connections opened by this class.
-	 */
+    /**
+     * Closes all database connections opened by this class.
+     */
     public function closeConnection()
     {
         if(isset($this->mysqli))
