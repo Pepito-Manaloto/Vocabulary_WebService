@@ -20,15 +20,17 @@ class VocabularyFetcher
 
     /**
      * Retrieves all vocabularies from the database + the number of recently added depending on the given date, and returns them as JSON object.
+     * @param lastUpdated the client's last updated vocabulary
+     * @return jsonObject
      */ 
-    public function getVocabularies()
+    public function getVocabularies($lastUpdated)
     {
-        $query = "CALL Get_Vocabularies(@recently_added_count);";
+        $query = "CALL Get_Vocabularies(?, @recently_added_count);";
 
         if($stmt = $this->mysqli->prepare($query))
         {
             $data = array();
-
+            $stmt->bind_param("s", $lastUpdated);
             $stmt->execute();
             $index = 0;
 
