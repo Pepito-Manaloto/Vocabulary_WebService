@@ -19,12 +19,12 @@ class VocabularyFetcher
     }
 
     /**
-     * Retrieves all vocabularies from the database and returns them as JSON object.
+     * Retrieves all vocabularies from the database + the number of recently added depending on the given date, and returns them as JSON object.
      */ 
     public function getVocabularies()
     {
-        $query = "CALL Get_Vocabularies();";
-        
+        $query = "CALL Get_Vocabularies(@recently_added_count);";
+
         if($stmt = $this->mysqli->prepare($query))
         {
             $data = array();
@@ -44,6 +44,10 @@ class VocabularyFetcher
             } while($stmt->more_results() && $stmt->next_result());
         }
 
+        $select = $mysqli->query('SELECT @recently_added_count;');
+        $result = $select->fetch_assoc();
+        $data['recently_added_count'] = $result['@recently_added_count'];
+        
         global $db;
         $db->closeConnection();
 
