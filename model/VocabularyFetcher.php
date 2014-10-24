@@ -46,7 +46,7 @@ class VocabularyFetcher
             } while($stmt->more_results() && $stmt->next_result());
         }
 
-        $select = $mysqli->query('SELECT @recently_added_count;');
+        $select = $this->mysqli->query('SELECT @recently_added_count;');
         $result = $select->fetch_assoc();
         $data['recently_added_count'] = $result['@recently_added_count'];
         

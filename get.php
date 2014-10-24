@@ -10,11 +10,13 @@ if(isset($headers['Authorization']))
 {
     if($headers['Authorization'] === md5("aaron"))
     {
-        $lastUpdated = $_GET['last_updated'];
-        
-        if(!isset($lastUpdated) || empty($lastUpdated)) // If last_updated is not given, then set earliest date
+        if(!isset($_GET['last_updated']) || empty($_GET['last_updated'])) // If last_updated is not given, then set earliest date
         {
             $lastUpdated = "1950-01-01";
+        }
+        else
+        {
+            $lastUpdated = $_GET['last_updated'];
         }
         
         $fetcher = new VocabularyFetcher();
