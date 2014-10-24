@@ -49,7 +49,7 @@ class VocabularyFetcher
         $select = $this->mysqli->query('SELECT @recently_added_count;');
         $result = $select->fetch_assoc();
         $data['recently_added_count'] = $result['@recently_added_count'];
-        
+
         global $db;
         $db->closeConnection();
 

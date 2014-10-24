@@ -18,7 +18,7 @@ if(isset($headers['Authorization']))
         {
             $lastUpdated = $_GET['last_updated'];
         }
-        
+
         $fetcher = new VocabularyFetcher();
 
         $data = $fetcher->getVocabularies($lastUpdated);
