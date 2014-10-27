@@ -19,9 +19,10 @@ class Database
     {
         $this->mysqli = new mysqli($this->host, $this->username, $this->password, $this->schema);
         
-        if( mysqli_connect_errno() )
+        if($this->mysqli->connect_errno)
         {
-            die("Could not connect");
+            http_response_code(500); // Internal Server Error
+            die("{$this->mysqli->connect_error}");
         }
         else
         {
