@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+ <hibernate-mapping>
+    <class name="ForeignLanguage" table="foreign_langauge">
+        <meta attribute="class-description">
+            This class contains all vocabularies of each foreign languages
+        </meta>
+        <id name="id" type="int" column="id">
+            <generator class="native" />
+        </id>
+        
+        <set name="vocabularies" cascade="all">
+            <key column="foreign_id" />
+            <one-to-many class="Vocabulary"/>
+        </set>
+        
+        <property name="language" column="language" type="string" />
+    </class>
+ </hibernate-mapping>

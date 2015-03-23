@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="Vocabulary" table="vocabulary">
+        <meta attribute="class-description">
+            This class contains the vocabulary details
+        </meta>
+
+        <id name="id" type="int" column="id">
+            <generator class="native" />
+        </id>
+        
+        <property name="englishWord" column="english_word" type="string" />
+        <property name="foreignWord" column="foreign_word" type="string" />
+    </class>
+</hibernate-mapping>

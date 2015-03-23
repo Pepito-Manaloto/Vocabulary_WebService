@@ -9,11 +9,16 @@
     <description>Web service for Vocabulary Desktop application.</description>
 
     <properties>
+        <!-- Generic properties -->
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    
         <json.smart.version>2.1.1</json.smart.version>
 
-        <jersey.bundle.version>1.19</jersey.bundle.version>
         <jersey.server.version>2.17</jersey.server.version>
-        <jersey.core.version>1.19</jersey.core.version>
+        <jersey.container.servlet.version>2.17</jersey.container.servlet.version>
 
         <hibernate.core.version>4.3.8.Final</hibernate.core.version>
         <hibernate.c3p0.version>4.3.8.Final</hibernate.c3p0.version>
@@ -29,19 +34,14 @@
 
         <!-- JERSEY -->
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-bundle</artifactId>
-            <version>${jersey.bundle.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
             <version>${jersey.server.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-core</artifactId>
-            <version>${jersey.core.version}</version>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${jersey.container.servlet.version}</version>
         </dependency>
 
         <!-- DATABASE -->

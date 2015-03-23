@@ -1,33 +1,43 @@
 package com.aaron.vocabulary.ws.bean;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  */
-public final class Vocabulary
+public final class Vocabulary implements Serializable
 {
-    private final String englishWord;
-    private final String foreignWord;
-    private final ForeignLanguage foreignLanguage;
-    
-    public Vocabulary(final String englishWord, final String foreignWord, final ForeignLanguage foreignLanguage)
-    {
-        this.englishWord = englishWord;
-        this.foreignWord = foreignWord;
-        this.foreignLanguage = foreignLanguage;
-    }
+    private static final long serialVersionUID = -4806944288017550814L;
+
+    private int id;
+    private String englishWord;
+    private String foreignWord;
 
     public Vocabulary(final String englishWord, final String foreignWord)
     {
         this.englishWord = englishWord;
         this.foreignWord = foreignWord;
-        this.foreignLanguage = null;
     }
-    
+
+    public int getId()
+    {
+        return this.id;
+    }
+
+    public void setId(final int id)
+    {
+        this.id = id;
+    }
+
     public String getEnglishWord()
     {
         return this.englishWord;
+    }
+
+    public void setEnglishWord(final String englishWord)
+    {
+        this.englishWord = englishWord;
     }
 
     public String getForeignWord()
@@ -35,12 +45,11 @@ public final class Vocabulary
         return this.foreignWord;
     }
 
-    public ForeignLanguage getForeignLanguage()
+    public void setForeignWord(final String foreignWord)
     {
-        return this.foreignLanguage;
+        this.foreignWord = foreignWord;
     }
-    
-    
+
     /**
      * Checks all attribute for equality.
      * @param o Vocabulary to compare
@@ -62,8 +71,7 @@ public final class Vocabulary
             Vocabulary that = (Vocabulary) o;
             
             return this.englishWord.equals(that.getEnglishWord()) && 
-                   this.foreignWord.equals(that.getForeignWord()) &&
-                   this.foreignLanguage.equals(that.getForeignLanguage());
+                   this.foreignWord.equals(that.getForeignWord());
         }
     }
 
@@ -77,7 +85,6 @@ public final class Vocabulary
         int hash = 3;
         hash = 47 * hash + Objects.hashCode(this.englishWord);
         hash = 47 * hash + Objects.hashCode(this.foreignWord);
-        hash = 47 * hash + Objects.hashCode(this.foreignLanguage);
         return hash;
     }
     
@@ -88,6 +95,6 @@ public final class Vocabulary
     @Override
     public String toString()
     {
-        return "English: " + this.englishWord + " " + this.foreignLanguage + ": " + this.foreignWord;
+        return "English: " + this.englishWord + " Foreign: " + this.foreignWord;
     }
 }

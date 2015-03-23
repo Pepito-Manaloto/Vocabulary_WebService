@@ -1,22 +1,51 @@
 package com.aaron.vocabulary.ws.bean;
 
+import java.io.Serializable;
+import java.util.Set;
+
 /**
+ * 
  */
-public enum ForeignLanguage
+public class ForeignLanguage implements Serializable
 {
-    Hokkien(1), 
-    Japanese(2), 
-    Mandarin(3);
+    private static final long serialVersionUID = -8373995646395398966L;
+
+    private int id;
+    private String language;
+    private Set<Vocabulary> vocabularies;
     
-    private final int id;
-    
-    private ForeignLanguage(final int id)
+    private ForeignLanguage(final String language)
     {
-        this.id = id;
+        this.language = language;
     }
     
     public int getId()
     {
         return this.id;
+    }
+
+    public void setId(final int id)
+    {
+        this.id = id;
+    }
+
+    public String getLanguage()
+    {
+        return this.language;
+    }
+
+    public void setLanguage(final String language)
+    {
+        this.language = language;
+    }
+
+    public Set<Vocabulary> getVocabularies()
+    {
+        return this.vocabularies;
+    }
+
+    public void setVocabularies(final Set<Vocabulary> vocabularies)
+    {
+        this.vocabularies = vocabularies;
     }
 }
