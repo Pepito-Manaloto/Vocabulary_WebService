@@ -1,9 +1,9 @@
 package com.aaron.vocabulary.ws.model.others;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Set;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -35,20 +35,23 @@ public class VocabularyUtils
     }
 
     /**
-     * Converts Vocabulary List into JSONArray.
-     * @param list
+     * Converts Vocabulary set into JSONArray.
+     * @param set
      * @return JSONArray
      */
-    public static final JSONArray toJSON(final List<Vocabulary> list)
+    public static final JSONArray toJSON(final Set<Vocabulary> set)
     {
         JSONArray result = new JSONArray();
-        int size = list.size();
 
-        for(int index=0; index < size; index++)
+        int index=0;
+        Iterator<Vocabulary> iterator = set.iterator();
+
+        while(iterator.hasNext())
         {
-            result.add(index, toJSON(list.get(index)));
+            result.add(index, toJSON(iterator.next()));
+            index++;
         }
-        
+
         return result;
     }
 
@@ -58,19 +61,23 @@ public class VocabularyUtils
      */
     private static final String getAuthKey()
     {
-        String key = "";
+        StringBuilder key = new StringBuilder();
 
         try
         {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] msgDigest = md.digest("aaron".getBytes("UTF-8"));
-            key = new String(msgDigest, "UTF-8");
+            byte[] msgDigest = md.digest("aaron".getBytes());
+   
+            for(byte b: msgDigest)
+            {
+                key.append(String.format("%02x", b & 0xff));
+            }
         }
-        catch (NoSuchAlgorithmException | UnsupportedEncodingException e)
+        catch (NoSuchAlgorithmException e)
         {
             e.printStackTrace();
         }
 
-        return key;
+        return key.toString();
     }
 }

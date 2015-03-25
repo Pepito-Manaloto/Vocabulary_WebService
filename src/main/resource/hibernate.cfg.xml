@@ -10,6 +10,8 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">root</property>
 
+        <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
+
         <!-- Outputs the SQL queries, should be disabled in Production -->
         <property name="hibernate.show_sql">true</property>
 
@@ -23,8 +25,8 @@
         <property name="hibernate.connection.provider_class">org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider</property>
 
         <!-- List of XML mapping files -->
-        <mapping resource="Vocabulary.hbm.xml" />
-        <mapping resource="ForeignLanguage.hbm.xml" />
+        <mapping class="com.aaron.vocabulary.ws.bean.Vocabulary" />
+        <mapping class="com.aaron.vocabulary.ws.bean.ForeignLanguage" />
 
     </session-factory>
 </hibernate-configuration>
