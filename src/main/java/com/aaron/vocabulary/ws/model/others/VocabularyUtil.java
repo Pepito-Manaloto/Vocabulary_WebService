@@ -15,9 +15,9 @@ import static com.aaron.vocabulary.ws.model.others.VocabularyJSONKey.*;
 /**
  * Utility class for vocabulary service
  */
-public class VocabularyUtils
+public class VocabularyUtil
 {
-    public static final String AUTH_KEY = getAuthKey();
+    public static final String AUTH_KEY = getAuthKey("aaron");
 
     /**
      * Converts Vocabulary object into JSON.
@@ -27,6 +27,11 @@ public class VocabularyUtils
     public static final JSONObject toJSON(final Vocabulary vocabulary)
     {
         JSONObject result = new JSONObject();
+
+        if(vocabulary == null)
+        {
+            return result;
+        }
 
         result.put(english_word.name(), vocabulary.getEnglishWord());
         result.put(foreign_word.name(), vocabulary.getForeignWord());
@@ -43,6 +48,11 @@ public class VocabularyUtils
     {
         JSONArray result = new JSONArray();
 
+        if(set == null)
+        {
+            return result;
+        }
+        
         int index=0;
         Iterator<Vocabulary> iterator = set.iterator();
 
@@ -57,16 +67,22 @@ public class VocabularyUtils
 
     /**
      * Obtains the hashed authentication key.
-     * @return String the hashed authentication key
+     * @param plainText the readable key
+     * @return String the hashed authentication key, empty string if plainText is empty
      */
-    private static final String getAuthKey()
+    public static final String getAuthKey(final String plainText)
     {
         StringBuilder key = new StringBuilder();
+
+        if(plainText == null || plainText.trim().length() < 1)
+        {
+            return key.toString();
+        }
 
         try
         {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] msgDigest = md.digest("aaron".getBytes());
+            byte[] msgDigest = md.digest(plainText.getBytes());
    
             for(byte b: msgDigest)
             {

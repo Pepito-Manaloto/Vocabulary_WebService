@@ -1,11 +1,13 @@
 package com.aaron.vocabulary.ws.model.db;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -18,20 +20,29 @@ import com.aaron.vocabulary.ws.bean.Vocabulary;
  */
 public class VocabularyDb
 {
+    private SessionFactory sessionFactory;
+
     /**
      * Default constructor.
      */
-    public VocabularyDb()
-    {}
+    public VocabularyDb(final SessionFactory sessionFactory)
+    {
+        this.sessionFactory = sessionFactory;
+    }
 
     /**
      * Gets the vocabularies of the given foreign language.
-     * @param ForeignLanguageEnum a foreign language
-     * @return Set<Vocabulary> set contains vocabularies
+     * @param language the foreign language
+     * @return Set<Vocabulary> set contains vocabularies, empty set if language is null
      */
     public Set<Vocabulary> getVocabularies(final Language language)
     {
-        Session session = HibernateUtil.openSession();
+        if(language == null)
+        {
+            return Collections.emptySet();
+        }
+
+        Session session = this.sessionFactory.openSession();
         Criteria criteria = session.createCriteria(ForeignLanguage.class);
         criteria.add(Restrictions.eq("language", language)); // Variable name in ForeignLanguage class
 
@@ -46,11 +57,16 @@ public class VocabularyDb
     /**
      * Gets the recently added vocabularies with last_updated greater than the given.
      * @param lastUpdated Date when the vocabulary was last updated
-     * @return int total recently added vocabularies
+     * @return int total recently added vocabularies, 0 if lastUpdated is null
      */
     public int getRecentlyAddedCount(final Date lastUpdated)
     {
-        Session session = HibernateUtil.openSession();
+        if(lastUpdated == null)
+        {
+            return 0;
+        }
+
+        Session session = this.sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Vocabulary.class);
         criteria.add(Restrictions.gt("lastUpdated", lastUpdated)); // Variable name in Vocabulary class
         criteria.setProjection(Projections.rowCount());

@@ -16,12 +16,13 @@ import javax.ws.rs.core.Response.Status;
 
 import com.aaron.vocabulary.ws.bean.ForeignLanguage.Language;
 import com.aaron.vocabulary.ws.bean.Vocabulary;
+import com.aaron.vocabulary.ws.model.db.HibernateUtil;
 import com.aaron.vocabulary.ws.model.db.VocabularyDb;
-import com.aaron.vocabulary.ws.model.others.VocabularyUtils;
+import com.aaron.vocabulary.ws.model.others.VocabularyUtil;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-import static com.aaron.vocabulary.ws.model.others.VocabularyUtils.*;
+import static com.aaron.vocabulary.ws.model.others.VocabularyUtil.*;
 import static com.aaron.vocabulary.ws.model.others.VocabularyJSONKey.*;
 
 /**
@@ -65,7 +66,7 @@ public class VocabularyService
 
         if(AUTH_KEY.equals(authenticationHeader))
         {
-            VocabularyDb vocabDb = new VocabularyDb();
+            VocabularyDb vocabDb = new VocabularyDb(HibernateUtil.getSessionFactory());
             Date lastUpdatedDate;
             try
             {
@@ -89,7 +90,7 @@ public class VocabularyService
             for(Language language: Language.values())
             {
                 Set<Vocabulary> vocabList = vocabDb.getVocabularies(language);
-                JSONArray jsonArray = VocabularyUtils.toJSON(vocabList);
+                JSONArray jsonArray = VocabularyUtil.toJSON(vocabList);
 
                 result.put(language.name(), jsonArray);
             }
