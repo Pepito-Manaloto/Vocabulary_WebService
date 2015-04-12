@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
@@ -21,6 +22,7 @@ import com.aaron.vocabulary.ws.bean.Vocabulary;
 public class VocabularyDb
 {
     private SessionFactory sessionFactory;
+    public static final String LAST_UPDATED_QUERY = "SELECT COUNT(*) FROM Vocabulary WHERE last_updated > :last_updated AND foreign_id = :foreign_id";
 
     /**
      * Default constructor.
@@ -73,6 +75,31 @@ public class VocabularyDb
 
         int result = ((Long) criteria.uniqueResult()).intValue();
 
+        session.close();
+
+        return result;
+    }
+
+    /**
+     * Gets the recently added vocabularies of the given language with last_updated greater than the given.
+     * @param lastUpdated Date when the vocabulary was last updated
+     * @param language selected language
+     * @return int total recently added vocabularies of the given language, 0 if lastUpdated is null
+     */
+    public int getRecentlyAddedCount(final Date lastUpdated, final Language language)
+    {
+        if(lastUpdated == null || language == null)
+        {
+            return 0;
+        }
+
+        Session session = this.sessionFactory.openSession();
+
+        Query query = session.createQuery(LAST_UPDATED_QUERY);
+        query.setParameter("last_updated", lastUpdated);
+        query.setParameter("foreign_id", language.ordinal() + 1);
+        int result = ((Long) query.uniqueResult()).intValue();
+        
         session.close();
 
         return result;

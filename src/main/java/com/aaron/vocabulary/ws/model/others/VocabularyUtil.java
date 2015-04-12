@@ -2,7 +2,11 @@ package com.aaron.vocabulary.ws.model.others;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
 
 import net.minidev.json.JSONArray;
@@ -18,6 +22,44 @@ import static com.aaron.vocabulary.ws.model.others.VocabularyJSONKey.*;
 public class VocabularyUtil
 {
     public static final String AUTH_KEY = getAuthKey("aaron");
+
+    private static final String DEFAULT_DATE = "2000-01-01 00:00:00";
+    private static final SimpleDateFormat simpleDateFormat;
+
+    static
+    {
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+    }
+
+    /**
+     * Converts the given date string into Date object. Returns 2000-01-01 00:00:00 if an error occurred.
+     * Default format is yyyy-MM-dd HH:mm:ss
+     * @param date String to convert
+     * @return Date
+     * @throws ParseException
+     */
+    public static Date parseDate(final String dateString) throws ParseException
+    {
+        Date date;
+
+        try
+        {
+            if(dateString != null)
+            {
+                date = simpleDateFormat.parse(dateString);
+            }
+            else
+            {
+                date = simpleDateFormat.parse(DEFAULT_DATE);
+            }
+        }
+        catch (ParseException e)
+        {
+            date = simpleDateFormat.parse(DEFAULT_DATE);
+        }
+
+        return date;
+    }
 
     /**
      * Converts Vocabulary object into JSON.

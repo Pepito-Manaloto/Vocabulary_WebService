@@ -27,6 +27,5 @@
         <!-- List of XML mapping files -->
         <mapping class="com.aaron.vocabulary.ws.bean.Vocabulary" />
         <mapping class="com.aaron.vocabulary.ws.bean.ForeignLanguage" />
-
     </session-factory>
 </hibernate-configuration>

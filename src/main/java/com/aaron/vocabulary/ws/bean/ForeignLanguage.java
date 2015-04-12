@@ -163,6 +163,6 @@ public class ForeignLanguage implements Serializable
     @Override
     public String toString()
     {
-        return "Foreignlanguage: " + this.language + " vocabularies count: " + this.vocabularies.size();
+        return "Foreignlanguage: " + this.language;
     }
 }
