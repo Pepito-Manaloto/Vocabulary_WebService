@@ -26,6 +26,8 @@ import static com.aaron.vocabulary.ws.model.others.VocabularyJSONKey.*;
 
 /**
  * Web service for vocabularies.
+ * Note: @PathParam  - for grouping
+ *       @QueryParam - for filtering and pagination
  */
 @Path("/")
 public class VocabularyService
@@ -40,7 +42,7 @@ public class VocabularyService
         return "Test";
     }
 
-    @Path("get/languages/{language}")
+    @Path("languages/{language}")
     @GET
     @Produces("application/json")
     public Response getSpecificVocabularies(@HeaderParam("Authorization") String authenticationHeader,
@@ -83,7 +85,7 @@ public class VocabularyService
      * @return Response JSON formatted
      * @throws ParseException this exception will not be thrown because the String being parsed is static
      */
-    @Path("get/languages")
+    @Path("languages")
     @GET
     @Produces("application/json")
     public Response getVocabularies(@HeaderParam("Authorization") String authenticationHeader,
