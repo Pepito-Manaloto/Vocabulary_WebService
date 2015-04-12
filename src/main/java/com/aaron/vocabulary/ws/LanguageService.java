@@ -30,20 +30,10 @@ import static com.aaron.vocabulary.ws.model.others.VocabularyJSONKey.*;
  * Note: @PathParam  - for grouping
  *       @QueryParam - for filtering and pagination
  */
-@Path("/")
-public class VocabularyService
+@Path("/languages")
+public class LanguageService
 {
-    /**
-     * Test for no resource path given.
-     */
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getDefault()
-    {
-        return "Test";
-    }
-
-    @Path("languages/{language}")
+    @Path("/{language}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSpecificVocabularies(@HeaderParam("Authorization") String authenticationHeader,
@@ -86,7 +76,6 @@ public class VocabularyService
      * @return Response JSON formatted
      * @throws ParseException this exception will not be thrown because the String being parsed is static
      */
-    @Path("languages")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVocabularies(@HeaderParam("Authorization") String authenticationHeader,
