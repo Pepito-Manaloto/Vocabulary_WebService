@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -36,7 +37,7 @@ public class VocabularyService
      * Test for no resource path given.
      */
     @GET
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public String getDefault()
     {
         return "Test";
@@ -44,7 +45,7 @@ public class VocabularyService
 
     @Path("languages/{language}")
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getSpecificVocabularies(@HeaderParam("Authorization") String authenticationHeader,
                                             @PathParam("language") Language language,
                                             @QueryParam("last_updated") String lastUpdated) throws ParseException
@@ -87,7 +88,7 @@ public class VocabularyService
      */
     @Path("languages")
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getVocabularies(@HeaderParam("Authorization") String authenticationHeader,
                                     @QueryParam("last_updated") String lastUpdated) throws ParseException
     {
