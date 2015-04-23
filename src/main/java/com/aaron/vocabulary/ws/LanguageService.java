@@ -61,7 +61,7 @@ public class LanguageService
         }
         else
         {
-            result.put(http_response_text.name(), "Unauthorized access: Please provide authentication key. auth_key=" + AUTH_KEY);
+            result.put(http_response_text.name(), "Unauthorized access: Please provide correct authentication key. auth_key=" + authenticationHeader);
         }
 
         return Response.status(responseCode)
@@ -105,7 +105,7 @@ public class LanguageService
         }
         else
         {
-            result.put(http_response_text.name(), "Unauthorized access: Please provide authentication key. auth_key=" + AUTH_KEY);
+            result.put(http_response_text.name(), "Unauthorized access: Please provide correct authentication key. auth_key=" + authenticationHeader);
         }
 
         return Response.status(responseCode)
