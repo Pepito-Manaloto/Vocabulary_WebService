@@ -27,9 +27,7 @@ exports.getFilterDate = function(request, response)
                 response.setHeader("Content-Type", "application/json");
                 response.status(200);
 
-                var result = getVocabularies(lastUpdated);
-
-                response.send(result);
+                getVocabularies(lastUpdated, response);
             }
             else
             {
@@ -51,36 +49,38 @@ exports.getFilterDate = function(request, response)
     }
 };
 
-function getVocabularies(lastUpdated)
+function getVocabularies(lastUpdated, response)
 {
     var mysql = require("mysql");
-    var conn =  mysql.createConnection(
+    var pool =  mysql.createPool(
         {
             host:     DB_HOST,
             user:     DB_USER,
             password: DB_PASS,
             database: DB_SCHEMA,
+            multipleStatements: true,
         });
     
-    conn.connect(function(err)
+    pool.getConnection(function(err, conn)
         {
             if(err)
             {
-                console.log("Error in connecting to database.\n%s.\n", err);
+                console.log("Error in getting connection to database.\n%s.\n", err);
             }
-        });
-    
-    conn.query("CALL Get_Vocabularies(" + lastUpdated + ", @recently_added_count); SELECT @recently_added_count;", processGetVocabularies);
-    
-    return '{"response": "success"}';
-}
+            else
+            {
+                conn.query("CALL Get_Vocabularies(" + lastUpdated + ", @recently_added_count); SELECT @recently_added_count AS recently_added_count;",
+                           function(err, results, fields)
+                           {
+                               console.log(err);
+                               console.log(results);
 
-function processGetVocabularies(err, results, fields)
-{
-    console.log(results);
-    console.log(fields);
-    console.log(printObject(results));
-    console.log(printObject(fields));
+                               response.send(results);
+                           });
+            }
+            
+            conn.release();
+        });
 }
 
 function printObject(obj)
