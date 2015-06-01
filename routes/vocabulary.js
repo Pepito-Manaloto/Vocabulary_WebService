@@ -65,7 +65,7 @@ function getVocabularies(lastUpdated, response)
         {
             if(err)
             {
-                console.log("Error in getting connection to database.\n%s.\n", err);
+                console.log("Error in getting connection to database.\n%s.", err);
             }
             else
             {
@@ -73,13 +73,14 @@ function getVocabularies(lastUpdated, response)
                            function(err, results, fields)
                            {
                                console.log(err);
-                               console.log(results);
-
                                response.send(results);
                            });
             }
-            
-            conn.release();
+
+            if(conn)
+            {   
+                conn.release();
+            }
         });
 }
 
