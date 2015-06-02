@@ -13,7 +13,8 @@ exports.getFilterDate = function(request, response)
     try
     {
         var auth  = request.headers['authorization'];
-        
+        response.setHeader("Content-Type", "application/json");
+
         if(auth)
         {
             if(auth == md5sum.update(AUTH_KEY).digest("hex"))
@@ -24,28 +25,25 @@ exports.getFilterDate = function(request, response)
                     lastUpdated = "1950-01-01";
                 }
 
-                response.setHeader("Content-Type", "application/json");
-                response.status(200);
-
                 getVocabularies(lastUpdated, response);
             }
             else
             {
                 response.status(401);
-                response.send("Unauthorized access.");
+                response.send({"http_response_text": "Unauthorized access."});
             }
         }
         else
         {
             response.status(400);
-            response.send("Please provide authorize key.");
+            response.send({"http_response_text": "Please provide authorize key."});
         }
     }
     catch(err)
     {
         console.log(err + "\n" + err.stack);
         response.status(500);
-        response.send("Internal Server Error.");
+        response.send({"http_response_text": "Internal Server Error. " + err});
     }
 };
 
@@ -66,14 +64,34 @@ function getVocabularies(lastUpdated, response)
             if(err)
             {
                 console.log("Error in getting connection to database.\n%s.", err);
+                response.status(500);
+                response.send({"http_response_text": "Internal Server Error. " + err});
             }
             else
             {
                 conn.query("CALL Get_Vocabularies(" + lastUpdated + ", @recently_added_count); SELECT @recently_added_count AS recently_added_count;",
-                           function(err, results, fields)
+                           function(err, result, fields)
                            {
-                               console.log(err);
-                               response.send(results);
+                               if(err)
+                               {
+                                   console.log("Error in getting vocabularies from database. %s.\n%s", err, err.stack);
+                                   response.status(500);
+                                   response.send({"http_response_text": "Internal Server Error. " + err});
+                               }
+                               else
+                               {
+                                   var len = result.length;
+                                   var recently_added_count = result[len - 1][0].recently_added_count;
+                                   var newResult = {"Hokkien": result[0],
+                                                    "Japanese": result[1],
+                                                    "Mandarin": result[2],
+                                                    "recently_added_count": recently_added_count,
+                                                    "http_response_text": "Success"};
+
+                                   
+                                   response.status(200);
+                                   response.send(newResult);
+                               }
                            });
             }
 
