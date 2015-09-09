@@ -47,18 +47,18 @@ exports.getFilterDate = function(request, response)
     }
 };
 
+var mysql = require("mysql");
+var pool =  mysql.createPool(
+    {
+        host:     DB_HOST,
+        user:     DB_USER,
+        password: DB_PASS,
+        database: DB_SCHEMA,
+        multipleStatements: true,
+    });
+
 function getVocabularies(lastUpdated, response)
 {
-    var mysql = require("mysql");
-    var pool =  mysql.createPool(
-        {
-            host:     DB_HOST,
-            user:     DB_USER,
-            password: DB_PASS,
-            database: DB_SCHEMA,
-            multipleStatements: true,
-        });
-    
     pool.getConnection(function(err, conn)
         {
             if(err)
