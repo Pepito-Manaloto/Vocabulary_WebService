@@ -3,8 +3,10 @@
  * Web service, retrieves all vocabularies and returns them as JSON object.
  */
 require_once("{$_SERVER['DOCUMENT_ROOT']}/Vocabulary/model/VocabularyFetcher.php");
+require_once("{$_SERVER['DOCUMENT_ROOT']}/Vocabulary/model/Logger.php");
 
 $headers = apache_request_headers();
+global $logger;
 
 if(isset($headers['Authorization']))
 {
@@ -18,6 +20,8 @@ if(isset($headers['Authorization']))
         {
             $lastUpdated = $_GET['last_updated'];
         }
+
+        $logger->logMessage(basename(__FILE__), __LINE__, "GET", "Authenticated. Get by last_updated={$lastUpdated}");
 
         $fetcher = new VocabularyFetcher();
 

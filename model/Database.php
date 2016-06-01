@@ -4,11 +4,12 @@
  */
 class Database
 {
-    private $host = "localhost";
-    private $username = "root";
-    private $password = "root";
-    private $schema = "my_vocabulary";
-    
+    const CHARSET = "utf8mb4";
+    const HOST = "localhost";
+    const USERNAME = "root";
+    const PASSWORD = "root";
+    const SCHEMA = "my_vocabulary";
+
     private $mysqli;
     private $pdo;
 
@@ -17,7 +18,7 @@ class Database
      */
     public function getMySQLiConnection()
     {
-        $this->mysqli = new mysqli($this->host, $this->username, $this->password, $this->schema);
+        $this->mysqli = new mysqli(self::HOST, self::USERNAME, self::PASSWORD, self::SCHEMA);
         
         if($this->mysqli->connect_errno)
         {
@@ -26,6 +27,7 @@ class Database
         }
         else
         {
+            $this->mysqli->set_charset(self::CHARSET);
             return $this->mysqli;
         }
     }
@@ -37,10 +39,11 @@ class Database
     {
         try
         {
-            $this->pdo = new PDO("mysql:host={$this->host};dbname={$this->schema}", $this->username, $this->password);
+            $this->pdo = new PDO("mysql:host=" . self::HOST . ";dbname=" . self::SCHEMA . ";charset=" . self::CHARSET, self::USERNAME, self::PASSWORD);
         }
         catch(PDOException $e)
         {
+            http_response_code(500); // Internal Server Error
             die("Could not connect. {$e}");
         }
         

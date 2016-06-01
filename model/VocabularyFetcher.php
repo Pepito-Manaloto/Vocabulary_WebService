@@ -1,5 +1,7 @@
 <?php
 require_once("{$_SERVER['DOCUMENT_ROOT']}/Vocabulary/model/Database.php");
+require_once("{$_SERVER['DOCUMENT_ROOT']}/Vocabulary/model/Logger.php");
+
 /**
  * Class that fetches vocabularies from the database.
  */
@@ -25,6 +27,7 @@ class VocabularyFetcher
      */ 
     public function getVocabularies($lastUpdated)
     {
+        global $logger;
         $query = "CALL Get_Vocabularies(?, @recently_added_count);";
 
         if($stmt = $this->mysqli->prepare($query))
@@ -33,6 +36,8 @@ class VocabularyFetcher
             $stmt->bind_param("s", $lastUpdated);
             $stmt->execute();
             $index = 0;
+
+            $logger->logMessage(basename(__FILE__), __LINE__, "getVocabularies", "CALL Get_Vocabularies({$lastUpdated}, @recently_added_count)");
 
             do
             {   
@@ -45,7 +50,11 @@ class VocabularyFetcher
                 }
             } while($stmt->more_results() && $stmt->next_result());
         }
-
+        else
+        {
+            $logger->logMessage(basename(__FILE__), __LINE__, "getVocabularies", "Error getting vocabularies. error={$mysqli->error}");
+        }
+            
         $select = $this->mysqli->query('SELECT @recently_added_count;');
         $result = $select->fetch_assoc();
         $data['recently_added_count'] = $result['@recently_added_count'];
@@ -63,6 +72,7 @@ class VocabularyFetcher
      */ 
     public function putVocabularies($jsonData)
     {
+        global $logger;
         $this->mysqli->autocommit(false);
         $count = count($jsonData);
         $result = true;
@@ -110,13 +120,16 @@ class VocabularyFetcher
      */
     private function insert($englishWord, $foreignWord, $foreignLanguage)
     {
+        global $logger;
         $query = "CALL Add_Vocabulary(?, ?, ?)";
 
         if($stmt = $this->mysqli->prepare($query))
         {
             $stmt->bind_param("ssi", $englishWord, $foreignWord, $foreignLanguage);
             $executeResult = $stmt->execute();
-            
+
+            $logger->logMessage(basename(__FILE__), __LINE__, "insert", "CALL Add_Vocabulary({$englishWord}, {$foreignWord}, {$foreignLanguage})");
+
             if($executeResult == false)
             {
                 return false;
@@ -130,6 +143,7 @@ class VocabularyFetcher
         }
         else
         {
+            $logger->logMessage(basename(__FILE__), __LINE__, "insert", "Error adding new vocabulary. error={$mysqli->error}");
             return false;
         }
 
@@ -146,12 +160,15 @@ class VocabularyFetcher
      */
     private function update($englishWord, $foreignWord, $foreignLanguage, $wordUpdate)
     {
+        global $logger;
         $query = "CALL Update_Vocabulary(?, ?, ?, ?)";
         if($stmt = $this->mysqli->prepare($query))
         {
             $stmt->bind_param("sssi", $englishWord, $foreignWord, $foreignLanguage, $wordUpdate);
             $executeResult = $stmt->execute();
-            
+
+            $logger->logMessage(basename(__FILE__), __LINE__, "update", "CALL Update_Vocabulary({$englishWord}, {$foreignWord}, {$foreignLanguage}, {$wordUpdate})");
+
             if($result = $stmt->get_result())
             {
                 $result->free_result();
@@ -160,6 +177,7 @@ class VocabularyFetcher
         }
         else
         {
+            $logger->logMessage(basename(__FILE__), __LINE__, "update", "Error updating vocabulary. error={$mysqli->error}");
             return false;
         }
 
