@@ -6,9 +6,12 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/Vocabulary/model/VocabularyFetcher.php
 
 $headers = apache_request_headers();
 
-if(isset($headers['Authorization']))
+$authorization = isset($headers['Authorization']) ? $headers['Authorization'] : $headers['authorization'];
+
+if(isset($authorization))
 {
-    if($headers['Authorization'] === md5("aaron"))
+    $isAuthorized = $authorization === md5("aaron");
+    if($isAuthorized)
     {
         $jsonData = json_decode(file_get_contents('php://input'), true);
 
@@ -30,12 +33,14 @@ if(isset($headers['Authorization']))
     else
     {
         http_response_code(401); // Unauthorized
-        echo "Unauthorized access.";
+        $error = array("Error" => "Unauthorized access.");
+        echo json_encode($error);
     }
 }
 else
 {
     http_response_code(400); // Bad Request
-    echo "Please provide authorize key.";
+    $error = array("Error" => "Please provide authorize key.");
+    echo json_encode($error);
 }
 ?>

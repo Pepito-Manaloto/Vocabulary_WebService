@@ -15,9 +15,9 @@ class VocabularyFetcher
      */ 
     public function __construct()
     {
-        global $db;
+        global $dbConnection;
 
-        $this->mysqli = $db->getMySQLiConnection();
+        $this->mysqli = $dbConnection->getMySQLiConnection();
     }
 
     /**
@@ -49,20 +49,20 @@ class VocabularyFetcher
                     $index++;
                 }
             } while($stmt->more_results() && $stmt->next_result());
-        }
-        else
-        {
-            $logger->logMessage(basename(__FILE__), __LINE__, "getVocabularies", "Error getting vocabularies. error={$mysqli->error}");
-        }
             
-        $select = $this->mysqli->query('SELECT @recently_added_count;');
-        $result = $select->fetch_assoc();
-        $data['recently_added_count'] = $result['@recently_added_count'];
+            $select = $this->mysqli->query('SELECT @recently_added_count;');
+            $result = $select->fetch_assoc();
+            $data['recently_added_count'] = $result['@recently_added_count'];
 
-        global $db;
-        $db->closeConnection();
+            global $dbConnection;
+            $dbConnection->closeConnection();
 
-        return json_encode($data);
+            return json_encode($data);
+        }
+
+        $logger->logMessage(basename(__FILE__), __LINE__, "getVocabularies", "Error getting vocabularies. error={$this->mysqli->error}");
+        $error = array("Error" => $this->mysqli->error);
+        return json_encode($error);
     }
     
     /**
@@ -72,7 +72,6 @@ class VocabularyFetcher
      */ 
     public function putVocabularies($jsonData)
     {
-        global $logger;
         $this->mysqli->autocommit(false);
         $count = count($jsonData);
         $result = true;
@@ -104,11 +103,10 @@ class VocabularyFetcher
         }
 
         $this->mysqli->commit();
-        global $db;
-        $db->closeConnection();
+        global $dbConnection;
+        $dbConnection->closeConnection();
 
         return "Success";
-        
     }
 
     /**
@@ -140,14 +138,12 @@ class VocabularyFetcher
                 $result->free_result();
                 $this->mysqli->next_result();
             }
-        }
-        else
-        {
-            $logger->logMessage(basename(__FILE__), __LINE__, "insert", "Error adding new vocabulary. error={$mysqli->error}");
-            return false;
+            
+            return true;
         }
 
-        return true;
+        $logger->logMessage(basename(__FILE__), __LINE__, "insert", "Error adding new vocabulary. error={$this->mysqli->error}");
+        return false;
     }
 
     /**
@@ -165,7 +161,7 @@ class VocabularyFetcher
         if($stmt = $this->mysqli->prepare($query))
         {
             $stmt->bind_param("sssi", $englishWord, $foreignWord, $foreignLanguage, $wordUpdate);
-            $executeResult = $stmt->execute();
+            $stmt->execute();
 
             $logger->logMessage(basename(__FILE__), __LINE__, "update", "CALL Update_Vocabulary({$englishWord}, {$foreignWord}, {$foreignLanguage}, {$wordUpdate})");
 
@@ -174,14 +170,12 @@ class VocabularyFetcher
                 $result->free_result();
                 $this->mysqli->next_result();
             }
-        }
-        else
-        {
-            $logger->logMessage(basename(__FILE__), __LINE__, "update", "Error updating vocabulary. error={$mysqli->error}");
-            return false;
+            
+            return true;
         }
 
-        return true;
+        $logger->logMessage(basename(__FILE__), __LINE__, "update", "Error updating vocabulary. error={$this->mysqli->error}");
+        return false;
     }
 }
 ?>

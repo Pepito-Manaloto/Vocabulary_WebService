@@ -18,18 +18,17 @@ class Database
      */
     public function getMySQLiConnection()
     {
+        global $logger;
         $this->mysqli = new mysqli(self::HOST, self::USERNAME, self::PASSWORD, self::SCHEMA);
         
         if($this->mysqli->connect_errno)
         {
             http_response_code(500); // Internal Server Error
-            die("{$this->mysqli->connect_error}");
+            throw new Exception("Could not connect. {$this->mysqli->connect_error}");
         }
-        else
-        {
-            $this->mysqli->set_charset(self::CHARSET);
-            return $this->mysqli;
-        }
+
+        $this->mysqli->set_charset(self::CHARSET);
+        return $this->mysqli;
     }
 
     /**
@@ -37,6 +36,7 @@ class Database
      */
     public function getPDOConnection()
     {
+        global $logger;
         try
         {
             $this->pdo = new PDO("mysql:host=" . self::HOST . ";dbname=" . self::SCHEMA . ";charset=" . self::CHARSET, self::USERNAME, self::PASSWORD);
@@ -44,7 +44,7 @@ class Database
         catch(PDOException $e)
         {
             http_response_code(500); // Internal Server Error
-            die("Could not connect. {$e}");
+            throw new Exception("Could not connect. {$e}");
         }
         
         return $this->pdo;
@@ -65,6 +65,6 @@ class Database
 }
 
 // Instantiate global variable of the class
-$db = new Database();
+$dbConnection = new Database();
 
 ?>
