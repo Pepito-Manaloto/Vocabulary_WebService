@@ -18,7 +18,6 @@ class Database
      */
     public function getMySQLiConnection()
     {
-        global $logger;
         $this->mysqli = new mysqli(self::HOST, self::USERNAME, self::PASSWORD, self::SCHEMA);
         
         if($this->mysqli->connect_errno)
@@ -36,7 +35,6 @@ class Database
      */
     public function getPDOConnection()
     {
-        global $logger;
         try
         {
             $this->pdo = new PDO("mysql:host=" . self::HOST . ";dbname=" . self::SCHEMA . ";charset=" . self::CHARSET, self::USERNAME, self::PASSWORD);
