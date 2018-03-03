@@ -1,7 +1,7 @@
 <?php
 define("LOG_DIR", "{$_SERVER['DOCUMENT_ROOT']}/Vocabulary/log");
 define("LOG_FILE", "/vocabulary.log." .  date("Y-m-d"));
-    
+
 class Logger
 {
     public function __construct()

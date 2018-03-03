@@ -43,8 +43,8 @@ class VocabularyFetcher
             {   
                 if($result = $stmt->get_result())
                 {
-                    // ex: $data['Hokkien'][english_word], $data['Hokkien'][foreign_word]
-                    $data[$this->foreignLanguages[$index]] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                    // ex: $data['languages']['Hokkien'][english_word], $data['languages']['Hokkien'][foreign_word]
+                    $data['languages'][$this->foreignLanguages[$index]] = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     $result->free_result();
                     $index++;
                 }
