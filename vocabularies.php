@@ -52,14 +52,10 @@ function parseLastUpdated()
 
     if($hasLastUpdatedHeader)
     {
-        $lastUpdated = $_GET['last_updated'];
-    }
-    else
-    {
-        $lastUpdated = "1950-01-01"; // If last_updated is not given, then set earliest date
+        return $_GET['last_updated'];
     }
 
-    return $lastUpdated;
+    return "1950-01-01"; // If last_updated is not given, then set earliest date
 }
 
 function returnErrorResponseDataAndCode($code, $errorMessage)
