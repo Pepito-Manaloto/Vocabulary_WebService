@@ -22,11 +22,5 @@ message:
   resource:
     basename: ${spring.cloud.config.uri}/${spring.application.name}/default/${spring.cloud.config.label}/resourcebundle/messages
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh
-
 logging:
   config: ${spring.cloud.config.uri}/${spring.application.name}/default/${spring.cloud.config.label}/logback.xml
