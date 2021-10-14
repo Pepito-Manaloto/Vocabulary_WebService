@@ -1,6 +1,7 @@
 package com.aaron.vocabularyapi.resource;
 
 import static com.aaron.vocabularyapi.constant.ErrorCode.TOKEN_UNAUTHORIZED;
+import static reactor.core.publisher.Mono.*;
 
 import javax.validation.Valid;
 
@@ -35,7 +36,7 @@ public class TokenResource
         log.info("login. Start. request={}", request);
 
         return tokenService.authenticate(request.getPassword())
-                .switchIfEmpty(msgResourceService.errorMessage(TOKEN_UNAUTHORIZED))
+                .switchIfEmpty(defer(() -> msgResourceService.errorMessage(TOKEN_UNAUTHORIZED)))
                 .map(token -> ResponseEntity.ok(new ResponseToken(token)));
     }
 }

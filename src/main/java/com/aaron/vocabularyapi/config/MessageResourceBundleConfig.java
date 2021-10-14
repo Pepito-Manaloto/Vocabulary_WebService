@@ -26,6 +26,7 @@ public class MessageResourceBundleConfig
         return messageSource;
     }
 
+    // Enables {code} as message in validation annotations
     @Bean
     public LocalValidatorFactoryBean getValidator()
     {

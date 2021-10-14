@@ -63,6 +63,13 @@ public class VocabularyServiceImpl implements VocabularyService
         log.info("getVocabulariesGroupedByForeignLanguage. Retrieved from database. vocabularies={}",
                 vocabularies.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue().size()).collect(joining(", ")));
 
-        return Mono.just(vocabularies);
+        if(vocabularies.isEmpty())
+        {
+            return Mono.empty();
+        }
+        else
+        {
+            return Mono.just(vocabularies);
+        }
     }
 }

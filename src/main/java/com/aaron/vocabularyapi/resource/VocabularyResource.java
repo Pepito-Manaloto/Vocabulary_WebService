@@ -1,6 +1,7 @@
 package com.aaron.vocabularyapi.resource;
 
 import static com.aaron.vocabularyapi.constant.ErrorCode.VOCABULARIES_NOT_FOUND;
+import static reactor.core.publisher.Mono.*;
 
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class VocabularyResource
         long recentlyAddedCount = vocabularyService.getRecentlyAddedCount(lastUpdated);
         Mono<Map<Language, List<Vocabulary>>> vocabularies = vocabularyService.getVocabulariesGroupedByForeignLanguage();
 
-        return vocabularies.switchIfEmpty(msgResourceService.errorMessage(VOCABULARIES_NOT_FOUND))
+        return vocabularies.switchIfEmpty(defer(() -> msgResourceService.errorMessage(VOCABULARIES_NOT_FOUND)))
                 .map(v -> ResponseVocabularies.builder()
                         .languages(v)
                         .recentlyAddedCount(recentlyAddedCount)

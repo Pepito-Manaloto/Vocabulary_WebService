@@ -1,0 +1,30 @@
+spring:
+  profiles.active: test
+  application:
+    name: test
+  webflux:
+    base-path: /Vocabulary
+  cloud:
+    config:
+      enabled: false
+  flyway:
+    enabled: true
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    locations: filesystem:deployment/db/migration
+    baseline-on-migrate: true
+    default-schema: my_vocabulary
+    schemas: my_vocabulary
+    target: 2
+
+security:
+  jjwt:
+    secret: 11aabdb8ddf75a006ffec2a3ba00c3a04ce5517c608a786eg8a042af9843bd7z
+    expiration: 60
+  authentication:
+    password: test
+
+message:
+  resource:
+    basename: messages
