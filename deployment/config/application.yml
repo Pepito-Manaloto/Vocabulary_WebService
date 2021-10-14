@@ -1,6 +1,5 @@
 spring:
-  profiles:
-    active: dev
+  profiles.active: dev
   application:
     # Determines the configs to grab from spring cloud server
     name: vocabulary-api
@@ -9,7 +8,7 @@ spring:
       uri: https://localhost:8888
       profile: ${spring.profiles.active}
       label: develop
-      fail-fast: true
+      #fail-fast: true
       client:
         ssl:
           trust-store: config/keystore/vocabulary-api.p12

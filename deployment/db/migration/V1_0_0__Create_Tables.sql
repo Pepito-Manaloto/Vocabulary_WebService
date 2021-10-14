@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS `my_vocabulary`;
+
 USE `my_vocabulary`;
 
 CREATE TABLE IF NOT EXISTS `foreign_language` (
