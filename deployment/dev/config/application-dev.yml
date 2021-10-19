@@ -1,0 +1,22 @@
+spring:
+  application:
+    # Determines the configs to grab from spring cloud server
+    name: vocabulary-api
+  cloud:
+    config:
+      # -Djavax.net.debug=all
+      uri: https://localhost:8888
+      profile: ${spring.profiles.active}
+      label: develop
+      #fail-fast: true
+  config:
+    activate:
+      on-profile: dev
+    import: configserver:${spring.cloud.config.uri}
+
+message:
+  resource:
+    basename: ${spring.cloud.config.uri}/${spring.application.name}/default/${spring.cloud.config.label}/resourcebundle/messages
+
+logging:
+  config: ${spring.cloud.config.uri}/${spring.application.name}/default/${spring.cloud.config.label}/logback.xml

@@ -1,20 +1,17 @@
 spring:
-  profiles.active: dev
   application:
     # Determines the configs to grab from spring cloud server
     name: vocabulary-api
   cloud:
     config:
-      uri: https://localhost:8888
+      # -Djavax.net.debug=all
+      uri: https://spring-config-server:8888
       profile: ${spring.profiles.active}
       label: develop
       #fail-fast: true
-      client:
-        ssl:
-          trust-store: config/keystore/vocabulary-api.p12
-          trust-store-password: aaron456
-          trust-store-type: PKCS12
   config:
+    activate:
+      on-profile: prod
     import: configserver:${spring.cloud.config.uri}
 
 message:

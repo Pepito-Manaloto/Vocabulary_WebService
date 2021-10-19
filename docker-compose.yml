@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  spring-config-server:
+    build: ../spring-config-server
+    restart: always
+    env_file:
+      - ./env/spring-config-server.env
+    ports:
+      - 8888:8888
+    networks:
+      - vocabulary-network
+  vocabulary-mariadb:
+    image: "mariadb:10.5.12"
+    restart: always
+    ports:
+      - 3307:3306
+    env_file:
+      - ./env/maria_db.env
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - vocabulary-network
+  vocabulary-api:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    env_file:
+      - ./env/vocabulary-api.env
+    depends_on:
+      - spring-config-server
+      - vocabulary-mariadb
+    networks:
+      - vocabulary-network
+
+volumes:
+  db_data:
+
+networks:
+  vocabulary-network:

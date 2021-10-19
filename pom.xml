@@ -207,17 +207,17 @@
                 </configuration>
             </plugin>
 
-            <!-- mvn clean flyway:clean -Dflyway.user=<user> -Dflyway.password=<pass> -Dflyway.url=<url> (drop schema) -->
-            <!-- mvn clean flyway:migrate -Dflyway.user=<user> -Dflyway.password=<pass> -Dflyway.url=<url> (omit schema on fresh migration) -->
-            <!-- mvn clean flyway:repair -Dflyway.user=<user> -Dflyway.password=<pass> -Dflyway.url=<url> (if migration state FAILED, but fix script first) -->
-            <!-- mvn clean flyway:undo -Dflyway.user=<user> -Dflyway.password=<pass> -Dflyway.url=<url> (need to pay for PRO version) -->
+            <!-- mvn clean flyway:clean -Dflyway.user=<user> -Dflyway.password=<pass> -Dflyway.url=jdbc:mariadb://localhost:3306 (drop schema) -->
+            <!-- mvn clean flyway:migrate -Dflyway.user=<user> -Dflyway.password=<pass> -Dflyway.url=jdbc:mariadb://localhost:3306 (omit schema on fresh migration) -->
+            <!-- mvn clean flyway:repair -Dflyway.user=<user> -Dflyway.password=<pass> -Dflyway.url=jdbc:mariadb://localhost:3306 (if migration state FAILED, but fix script first) -->
+            <!-- mvn clean flyway:undo -Dflyway.user=<user> -Dflyway.password=<pass> -Dflyway.url=jdbc:mariadb://localhost:3306 (need to pay for PRO version) -->
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <configuration>
                     <baselineOnMigrate>true</baselineOnMigrate>
                     <defaultSchema>my_vocabulary</defaultSchema>
-                    <locations>filesystem:db/migration</locations>
+                    <locations>filesystem:deployment/db/migration</locations>
                     <schemas>
                         <schema>my_vocabulary</schema>
                     </schemas>
